@@ -31,10 +31,18 @@ productsDiv.addEventListener("click", (event) => {
   } else if (event.target.className == "remove-product") {
     event.target.closest(".product").remove();
   }
+  calculateProductPrice(event.target);
+  calculateCartPrice();
 });
 
 const calculateProductPrice = (btn) => {
   const productInfoDiv = btn.parentElement.parentElement;
+  const price = Number(
+    productInfoDiv.querySelector(".product-price strong").innerText
+  );
+  const quantity = Number(productInfoDiv.querySelector(".quantity").innerText);
+  const productTotalDiv = productInfoDiv.querySelector(".price");
+  productTotalDiv.innerText = (price * quantity).toFixed(2);
 };
 
 const calculateCartPrice = () => {};
