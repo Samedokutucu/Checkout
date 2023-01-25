@@ -6,6 +6,7 @@ window.addEventListener("load", () => {
   localStorage.setItem("taxRate", taxRate);
   localStorage.setItem("shippingPrice", shippingPrice);
   localStorage.setItem("shippingFreePrice", shippingFreePrice);
+  calculateCartPrice();
 });
 
 const productsDiv = document.querySelector(".products");
@@ -45,4 +46,24 @@ const calculateProductPrice = (btn) => {
   productTotalDiv.innerText = (price * quantity).toFixed(2);
 };
 
-const calculateCartPrice = () => {};
+const calculateCartPrice = () => {
+  const productTotalPricesDivs = document.querySelectorAll(".price");
+  const subtotal = [...productTotalPricesDivs].reduce(
+    (acc, price) => acc + Number(price.innerText),
+    0
+  );
+  const taxtPrice = subtotal * localStorage.getItem("taxRate");
+  const totalShippingPrice = parseFloat(
+    subtotal > 0 && subtotal < localStorage.getItem("shippingFreePrice")
+      ? localStorage.getItem("shippingPrice")
+      : 0
+  );
+
+  const totalCart = subtotal + taxtPrice + totalShippingPrice;
+
+  document.querySelector("#subtotalCart").innerText = subtotal.toFixed(2);
+  document.querySelector("#taxRateCart").innerText = taxtPrice.toFixed(2);
+  document.querySelector("#shippingCart").innerText =
+    totalShippingPrice.toFixed(2);
+  document.querySelector("#totalCart").innerText = totalCart.toFixed(2);
+};
